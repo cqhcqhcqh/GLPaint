@@ -72,11 +72,12 @@ float pointToSegDist(vec2 pt, vec2 pa, vec2 pb) {
 }
 
 void main() {
-    highp vec2 last = vec2(u_lastPoint.x * u_resolution.x, u_lastPoint.y * u_resolution.y);
-    highp vec2 current = vec2(u_currentPoint.x * u_resolution.x, u_currentPoint.y * u_resolution.y);
-    highp float dist = pointToSegDist(gl_FragCoord.xy, last, current);
-    if(dist > u_lineWidth / 2.0) discard;
-    highp float blurStart = (u_lineWidth - u_lineBlurWidth)/2.0;
-    highp float enable= step(dist, blurStart);
-    gl_FragColor = vec4( 1.0, 0.0, 0.0, enable + (1.0 - ((dist - blurStart)/ u_lineBlurWidth * 2.0)) * (1.0 - enable));
+//    highp vec2 last = vec2(u_lastPoint.x * u_resolution.x, u_lastPoint.y * u_resolution.y);
+//    highp vec2 current = vec2(u_currentPoint.x * u_resolution.x, u_currentPoint.y * u_resolution.y);
+//    highp float dist = pointToSegDist(gl_FragCoord.xy, last, current);
+//    if(dist > u_lineWidth / 2.0) discard;
+//    highp float blurStart = (u_lineWidth - u_lineBlurWidth)/2.0;
+//    highp float enable= step(dist, blurStart);
+//    gl_FragColor = vec4( 1.0, 0.0, 0.0, enable + (1.0 - ((dist - blurStart)/ u_lineBlurWidth * 2.0)) * (1.0 - enable));
+    gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0);
 }

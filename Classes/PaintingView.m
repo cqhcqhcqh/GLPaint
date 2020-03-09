@@ -166,7 +166,7 @@ typedef struct {
         
         // Set the view's scale factor as you wish
         self.contentScaleFactor = [[UIScreen mainScreen] scale];
-        
+        self.backgroundColor = [UIColor whiteColor];
 		// Make sure to start with a cleared buffer
 		needsErase = YES;
 	}
@@ -325,7 +325,57 @@ typedef struct {
 //    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
 //    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, backingWidth, backingHeight);
 //    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFE
-	{
+	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        NSLog(@"failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
+        return NO;
+    }
+    
+    // Update projection matrix
+    GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(0, backingWidth, 0, backingHeight, -1, 1);
+    GLKMatrix4 modelViewMatrix = GLKMatrix4Identity; // this sample uses a constant identity modelView matrix
+    GLKMatrix4 MVPMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
+    
+    glUseProgram(program[PROGRAM_POINT].id);
+    glUniformMatrix4fv(program[PROGRAM_POINT].uniform[UNIFORM_MVP], 1, GL_FALSE, MVPMatrix.m);
+    
+    // Update viewport
+    glViewport(0, 0, backingWidth, backingHeight);
+    
+    // Create a Vertex Buffer Object to hold our data
+    glGenBuffers(1, &vboId);
+    
+    // Load shaders
+    [self setupShaders];
+    
+    // Enable blending and set a blending function appropriate for premultiplied alpha pixel data
+    //    glEnable(GL_BLEND);
+    glDisable(GL_BLEND);
+    //    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    
+    // Playback recorded path, which is "Shake Me"
+    //    NSMutableArray* recordedPaths = [NSMutableArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Recording" ofType:@"data"]];
+    //    if([recordedPaths count])
+    //        [self performSelector:@selector(playback:) withObject:recordedPaths afterDelay:0.2];
+    
+    return YES;
+}
+
+- (BOOL)resizeFromLayer:(CAEAGLLayer *)layer
+{
+    // Allocate color buffer backing based on the current layer size
+    glBindRenderbuffer(GL_RENDERBUFFER, viewRenderbuffer);
+    [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &backingWidth);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &backingHeight);
+    
+    // For this sample, we do not need a depth buffer. If you do, this is how you can allocate depth buffer backing:
+//    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
+//    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, backingWidth, backingHeight);
+//    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+    
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
         NSLog(@"Failed to make complete framebuffer objectz %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
         return NO;
     }
@@ -413,7 +463,7 @@ typedef struct {
 	
 	// Allocate vertex array buffer
 	if(vertexBuffer == NULL)
-		vertexBuffer = malloc(2 * 2 * sizeof(GLfloat));
+		vertexBuffer = malloc(2 * 4 * sizeof(GLfloat));
 //
 //	// Add points to the buffer so there are drawing points every X pixels
 //	count = MAX(ceilf(sqrtf((end.x - start.x) * (end.x - start.x) + (end.y - start.y) * (end.y - start.y)) / kBrushPixelStep), 1);
@@ -423,35 +473,38 @@ typedef struct {
 //			vertexBuffer = realloc(vertexBuffer, vertexMax * 2 * sizeof(GLfloat));
 //		}
 //
-		vertexBuffer[0] = start.x;
-		vertexBuffer[1] = start.y;
-        vertexBuffer[2] = end.x;
-        vertexBuffer[3] = end.y;
+		vertexBuffer[0] = start.x - 25;
+		vertexBuffer[1] = start.y - 25;
+        vertexBuffer[2] = start.x + 25;
+        vertexBuffer[3] = start.y - 25;
+    vertexBuffer[4] = start.x - 25;
+    vertexBuffer[5] = start.y + 25;
+    vertexBuffer[6] = start.x + 25;
+    vertexBuffer[7] = start.y + 25;
 //		vertexCount += 1;
 //	}
     
-    float CUBE[] = {
-            -1.0f, -1.0f,
-            1.0f, -1.0f,
-            -1.0f, 1.0f,
-            1.0f, 1.0f,
-    };
+//    float CUBE[] = {
+//            -1.0f, -1.0f,
+//            1.0f, -1.0f,
+//            -1.0f, 1.0f,
+//            1.0f, 1.0f,
+//    };
     
     glUniform2f(program[PROGRAM_POINT].uniform[UNIFORM_LASTPOINT], start.x, start.y);
     
     glUniform2f(program[PROGRAM_POINT].uniform[UNIFORM_CURRENTPOINT], end.x, end.y);
     
 	// Load data to the Vertex Buffer Object
-//	glBindBuffer(GL_ARRAY_BUFFER, vboId);
-//	glBufferData(GL_ARRAY_BUFFER, 4*sizeof(GLfloat), CUBE, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, vboId);
+	glBufferData(GL_ARRAY_BUFFER, 8*sizeof(GLfloat), vertexBuffer, GL_DYNAMIC_DRAW);
 	
     glEnableVertexAttribArray(ATTRIB_VERTEX);
-    glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, GL_FALSE, 0, CUBE);
+    glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	
 	// Draw
     glUseProgram(program[PROGRAM_POINT].id);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glDisableVertexAttribArray(ATTRIB_VERTEX);
     
 	// Display the buffer
 	glBindRenderbuffer(GL_RENDERBUFFER, viewRenderbuffer);
