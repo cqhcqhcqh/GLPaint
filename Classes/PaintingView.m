@@ -71,7 +71,6 @@ enum {
 
 enum {
 	UNIFORM_MVP,
-    UNIFORM_RESOLUTION,
     UNIFORM_LASTPOINT,
     UNIFORM_CURRENTPOINT,
     UNIFORM_LINEWIDTH,
@@ -81,6 +80,7 @@ enum {
 
 enum {
 	ATTRIB_VERTEX,
+    ATTRIB_VERTEXCOLOR,
 	NUM_ATTRIBS
 };
 
@@ -206,9 +206,10 @@ typedef struct {
 		GLint attrib[NUM_ATTRIBS];
 		GLchar *attribName[NUM_ATTRIBS] = {
 			"inVertex",
+            "vertexColor",
 		};
 		const GLchar *uniformName[NUM_UNIFORMS] = {
-			"MVP", "u_resolution", "u_lastPoint", "u_currentPoint", "u_lineWidth", "u_lineBlurWidth"
+			"MVP", "u_lastPoint", "u_currentPoint", "u_lineWidth", "u_lineBlurWidth"
 		};
 		
 		// auto-assign known attribs
@@ -247,9 +248,7 @@ typedef struct {
             glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEWIDTH], 30.0);
             
             glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEBLURWIDTH], 10.0);
-            
-            glUniform2f(program[PROGRAM_POINT].uniform[UNIFORM_RESOLUTION], backingWidth, backingHeight);
-            
+                        
             // initialize brush color
 //            glUniform4fv(program[PROGRAM_POINT].uniform[UNIFORM_VERTEX_COLOR], 1, brushColor);
         }
@@ -485,10 +484,41 @@ typedef struct {
 //	}
     
 //    float CUBE[] = {
-//            -1.0f, -1.0f,
-//            1.0f, -1.0f,
-//            -1.0f, 1.0f,
-//            1.0f, 1.0f,
+//        0.0f, 0.0f,
+//            0.0f, 0.5f,
+//        0.5f, 0.0f,
+//
+//            0.5f, 0.5f,
+//
+//
+//    };
+    float para_vertex[]=
+    {
+        50.0 * 2,(self.bounds.size.height - 100.0) * 2 ,0.0,
+        1.0,1.0,0.0,
+        100.0 * 2,(self.bounds.size.height -30.0) * 2,0.0,
+        1.0,1.0,0.0,
+        60.0 * 2,(self.bounds.size.height -100.0) * 2,0.0,
+        1.0,0.0,0.0,
+        110.0 * 2 ,(self.bounds.size.height -30.0) * 2,0.0,
+        1.0,0.0,0.0,
+        70.0 * 2 ,(self.bounds.size.height -100.0) * 2,0.0,
+        1.0,1.0,0.0,
+        120.0 * 2 ,(self.bounds.size.height -30.0) * 2,0.0,
+        1.0,1.0,0.0
+    };
+    
+//    float vertices[] = {
+//        // 位置              // 颜色
+//        -0.5f, -0.5f, 0.0f,  1.0f, 1.0f,1.0f,   // 左下
+//        0.0f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f ,   // 顶部
+//        0.0f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f, // 右中
+//        0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f ,   // 顶部
+//        0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f,    // 右下
+//        // 位置              // 颜色
+//         0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // 右下
+//        1.0f, 0.5f, 0.0f,  1.0f, 1.0f, 1.0f,   // 左下
+//         0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // 顶部
 //    };
     
     glUniform2f(program[PROGRAM_POINT].uniform[UNIFORM_LASTPOINT], start.x, start.y);
@@ -497,14 +527,17 @@ typedef struct {
     
 	// Load data to the Vertex Buffer Object
 	glBindBuffer(GL_ARRAY_BUFFER, vboId);
-	glBufferData(GL_ARRAY_BUFFER, 8*sizeof(GLfloat), vertexBuffer, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 36*sizeof(GLfloat), para_vertex, GL_DYNAMIC_DRAW);
 	
     glEnableVertexAttribArray(ATTRIB_VERTEX);
-    glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), 0);
 	
+    glEnableVertexAttribArray(ATTRIB_VERTEXCOLOR);
+    glVertexAttribPointer(ATTRIB_VERTEXCOLOR, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), 3*sizeof(GLfloat));
+    
 	// Draw
     glUseProgram(program[PROGRAM_POINT].id);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
     
 	// Display the buffer
 	glBindRenderbuffer(GL_RENDERBUFFER, viewRenderbuffer);

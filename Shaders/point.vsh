@@ -46,16 +46,17 @@
  */
 
 attribute vec4 inVertex;
-
+attribute vec3 vertexColor;
 uniform mat4 MVP;
 //uniform float pointSize;
 //uniform lowp vec4 vertexColor;
-
-//varying lowp vec4 color;
+varying lowp vec3 color;
+//varying lowp mat4 outMVP;
 
 void main()
 {
-	gl_Position = MVP * inVertex;
+	gl_Position = inVertex * MVP;
 //    gl_PointSize = pointSize;
-//    color = vertexColor;
+    color = vertexColor;
+//    outMVP = MVP;
 }
