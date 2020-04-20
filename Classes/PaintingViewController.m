@@ -79,6 +79,7 @@
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor whiteColor];
     // Create a segmented control so that the user can choose the brush color.
     // Create the UIImages with the UIImageRenderingModeAlwaysOriginal rendering mode. This allows us to show the actual image colors in the segmented control.
     UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:

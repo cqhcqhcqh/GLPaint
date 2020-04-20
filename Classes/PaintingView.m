@@ -50,7 +50,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGLES/EAGLDrawable.h>
 #import <GLKit/GLKit.h>
-
+#import "UIColor+Versa.h"
 #import "PaintingView.h"
 #import "shaderUtil.h"
 #import "fileUtil.h"
@@ -58,7 +58,7 @@
 
 //CONSTANTS:
 
-#define kBrushOpacity		(1.0 / 3.0)
+#define kBrushOpacity		1.0
 #define kBrushPixelStep		3
 #define kBrushScale			2
 
@@ -169,7 +169,11 @@ typedef struct {
         
         // Set the view's scale factor as you wish
         self.contentScaleFactor = [[UIScreen mainScreen] scale];
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
+        
+        brushColor[0] = 1.0;
+        brushColor[1] = 0.2;
+        brushColor[2] = 0.4;
 		// Make sure to start with a cleared buffer
 		needsErase = YES;
 	}
@@ -234,8 +238,9 @@ typedef struct {
                 "inVertex",
                 "inTextureVertex",
             };
-            const GLchar *uniformName[1] = {
-                "texture"
+            const GLchar *uniformName[2] = {
+                "MVP",
+                "texture",
             };
             
             // auto-assign known attribs
@@ -250,11 +255,17 @@ typedef struct {
             
             glueCreateProgram(vsrc, fsrc,
                               attribCt, (const GLchar **)&attribUsed[0], attrib,
-                              1, &uniformName[0], program[i].uniform,
+                              2, &uniformName[0], program[i].uniform,
                               &program[i].id);
             
             glUseProgram(program[PROGRAM_BACKGROUND].id);
-            glUniform1i(program[PROGRAM_BACKGROUND].uniform[0], 0);
+            glUniform1i(program[PROGRAM_BACKGROUND].uniform[1], 0);
+            
+            GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(0, backingWidth, 0, backingHeight, -1, 1);
+            GLKMatrix4 modelViewMatrix = GLKMatrix4Identity; // this sample uses a constant identity modelView matrix
+            GLKMatrix4 MVPMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
+            
+            glUniformMatrix4fv(program[PROGRAM_BACKGROUND].uniform[UNIFORM_MVP], 1, GL_FALSE, MVPMatrix.m);
         }
 		
 		free(vsrc);
@@ -276,9 +287,9 @@ typedef struct {
             glUniformMatrix4fv(program[PROGRAM_POINT].uniform[UNIFORM_MVP], 1, GL_FALSE, MVPMatrix.m);
         
             // point size
-            glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEWIDTH], 30.0);
+            glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEWIDTH], 100.0);
             
-            glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEBLURWIDTH], 10.0);
+            glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEBLURWIDTH], 100.0);
                         
             // initialize brush color
             glUniform4fv(program[PROGRAM_POINT].uniform[UNIFORM_VERTEX_COLOR], 1, brushColor);
@@ -695,6 +706,7 @@ typedef struct {
 
 - (void)setBrushColorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue
 {
+    return;
 	// Update the brush color
     brushColor[0] = red * kBrushOpacity;
     brushColor[1] = green * kBrushOpacity;

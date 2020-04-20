@@ -32,6 +32,7 @@
 		63A8FAAE244D78DD00262D27 /* background.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 63A8FAAD244D78DD00262D27 /* background.vsh */; };
 		63A8FAB0244D8D1700262D27 /* 10149004-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 63A8FAAF244D8D1700262D27 /* 10149004-1.png */; };
 		63A8FAB2244D8DC100262D27 /* icon_Save_Selection@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63A8FAB1244D8DC000262D27 /* icon_Save_Selection@3x.png */; };
+		63A8FAB5244D997E00262D27 /* UIColor+Versa.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A8FAB3244D997D00262D27 /* UIColor+Versa.m */; };
 		AF7492AB1728A9E50013253B /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF7492A91728A9E50013253B /* MainWindow.xib */; };
 		AF7E20421728A2C600728423 /* PaintingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF7E203F1728A2C600728423 /* PaintingViewController.xib */; };
 		AF7E20451728A54000728423 /* PaintingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7E20441728A53F00728423 /* PaintingViewController.m */; };
@@ -82,6 +83,8 @@
 		63A8FAAD244D78DD00262D27 /* background.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = background.vsh; sourceTree = "<group>"; };
 		63A8FAAF244D8D1700262D27 /* 10149004-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "10149004-1.png"; sourceTree = "<group>"; };
 		63A8FAB1244D8DC000262D27 /* icon_Save_Selection@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_Save_Selection@3x.png"; sourceTree = "<group>"; };
+		63A8FAB3244D997D00262D27 /* UIColor+Versa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Versa.m"; sourceTree = "<group>"; };
+		63A8FAB4244D997E00262D27 /* UIColor+Versa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Versa.h"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* GLPaint-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GLPaint-Info.plist"; sourceTree = "<group>"; };
 		AF7492AA1728A9E50013253B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		AF7E20401728A2C600728423 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PaintingViewController.xib; sourceTree = "<group>"; };
@@ -209,6 +212,8 @@
 			children = (
 				1B8CA30A0DC8E3A4002C657A /* AppController.h */,
 				1B8CA30B0DC8E3A4002C657A /* AppController.m */,
+				63A8FAB4244D997E00262D27 /* UIColor+Versa.h */,
+				63A8FAB3244D997D00262D27 /* UIColor+Versa.m */,
 				AF7E20431728A53F00728423 /* PaintingViewController.h */,
 				AF7E20441728A53F00728423 /* PaintingViewController.m */,
 				1B8CA30C0DC8E3A4002C657A /* PaintingView.h */,
@@ -325,6 +330,7 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1B8CA3120DC8E3A4002C657A /* AppController.m in Sources */,
 				1B8CA3130DC8E3A4002C657A /* PaintingView.m in Sources */,
+				63A8FAB5244D997E00262D27 /* UIColor+Versa.m in Sources */,
 				1B8CA3140DC8E3A4002C657A /* SoundEffect.m in Sources */,
 				AF877F8C17272804002D08B8 /* fileUtil.m in Sources */,
 				AF877F8D17272804002D08B8 /* shaderUtil.c in Sources */,

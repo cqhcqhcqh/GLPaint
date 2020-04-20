@@ -47,7 +47,6 @@
  */
 #extension GL_EXT_shader_framebuffer_fetch : require
 
-//uniform sampler2D texture;
 varying lowp vec4 color;
 varying lowp mat4 outMVP;
 precision mediump float;
@@ -103,20 +102,11 @@ void main() {
     highp vec4 lastPoint = vec4(u_lastPoint, 0.0, 0.0) * outMVP;
     highp vec4 currentPoint = vec4(u_currentPoint, 0.0, 0.0) * outMVP;
     highp float dist = pointToSegDist(gl_FragCoord.xy, vec2(lastPoint.x * 320.0, lastPoint.y * 568.0), vec2(currentPoint.x * 320.0, currentPoint.y * 568.0));
-    if(dist > 30.0 / 2.0) discard;
-    highp float blurStart = (30.0 - 28.0)/2.0;
+    if(dist > u_lineWidth / 2.0) discard;
+    highp float blurStart = (u_lineWidth - u_lineWidth)/2.0;
     highp float enable = step(dist, blurStart);
     lowp vec4 dst = gl_LastFragData[0];
-    float a = enable + (1.0 - ((dist - blurStart)/ 30.0 * 2.0)) * (1.0 - enable);
+    float a = enable + (1.0 - ((dist - blurStart)/ u_lineWidth * 2.0)) * (1.0 - enable);
     float b = max(dst.a,a);
-//    float c = min(dst.a,a);
-//    if( a*dst.a>0.0){
-//        a = a+dst.a*(1.-a) ;
-//    }else{
-//        a = b;
-//    }
-    //if(a-dst.a<0.2) a= b;
-
     gl_FragColor = vec4(color.rgb, b);
-//    gl_FragColor = vec4(color, 1.0);
 }
