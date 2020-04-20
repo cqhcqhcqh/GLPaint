@@ -103,7 +103,7 @@
     segmentedControl.selectedSegmentIndex = 2;
     
     // Add the control to the window
-    [self.view addSubview:segmentedControl];
+//    [self.view addSubview:segmentedControl];
     // Now that the control is added, you can release it
     
     // Define a starting color
@@ -124,6 +124,57 @@
 	// Erase the view when recieving a notification named "shake" from the NSNotificationCenter object
 	// The "shake" nofification is posted by the PaintingWindow object when user shakes the device
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eraseView) name:@"shake" object:nil];
+    
+    UISlider *blurWidthSlider = [[UISlider alloc] init];
+    blurWidthSlider.maximumValue = 100;
+    blurWidthSlider.minimumValue = 0.0;
+    blurWidthSlider.value = 50.0;
+    [blurWidthSlider addTarget:self action:@selector(blurWidthChange:) forControlEvents:UIControlEventValueChanged];
+    blurWidthSlider.frame = CGRectMake(50.0, rect.size.height - 150.0, 200, 34.0);
+    [self.view addSubview:blurWidthSlider];
+    
+    UILabel *blurTitle = [[UILabel alloc] init];
+    blurTitle.text = @"羽化";
+    [blurTitle sizeToFit];
+    blurTitle.frame = CGRectMake(10.0, rect.size.height - 150.0, blurTitle.bounds.size.width, 34.0);
+    [self.view addSubview:blurTitle];
+    
+    UISlider *lineWidthSlider = [[UISlider alloc] init];
+    lineWidthSlider.maximumValue = 100;
+    lineWidthSlider.minimumValue = 0.0;
+    lineWidthSlider.value = 50.0;
+    lineWidthSlider.frame = CGRectMake(50.0, rect.size.height - 100.0, 200, 34.0);
+    [lineWidthSlider addTarget:self action:@selector(lineWidthChange:) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:lineWidthSlider];
+    
+    UILabel *lineWidthTitle = [[UILabel alloc] init];
+    lineWidthTitle.text = @"线宽";
+    [lineWidthTitle sizeToFit];
+    lineWidthTitle.frame = CGRectMake(10.0, rect.size.height - 100.0, lineWidthTitle.bounds.size.width, 34.0);
+    [self.view addSubview:lineWidthTitle];
+    
+    UISwitch *eraser = [[UISwitch alloc] init];
+    [eraser addTarget:self action:@selector(eraser:) forControlEvents:UIControlEventValueChanged];
+    eraser.frame = CGRectMake(70.0, 50.0, eraser.bounds.size.width, eraser.bounds.size.height);
+    [self.view addSubview:eraser];
+    
+    UILabel *eraserTitlte = [[UILabel alloc] init];
+    eraserTitlte.text = @"橡皮擦";
+    [eraserTitlte sizeToFit];
+    eraserTitlte.frame = CGRectMake(10.0, 50.0, eraserTitlte.bounds.size.width, 34.0);
+    [self.view addSubview:eraserTitlte];
+}
+
+- (void)blurWidthChange:(UISlider *)slider {
+    [(PaintingView *)self.view updateBlurWidth:slider.value];
+}
+
+- (void)lineWidthChange:(UISlider *)slider {
+    [(PaintingView *)self.view updateLineWidth:slider.value];
+}
+
+- (void)eraser:(UISwitch *)sender {
+    [(PaintingView *)self.view eraserPaint:sender.isOn];
 }
 
 - (void)viewDidAppear:(BOOL)animated

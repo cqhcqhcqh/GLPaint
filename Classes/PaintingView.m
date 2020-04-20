@@ -402,11 +402,6 @@ typedef struct {
     glDisable(GL_BLEND);
     //    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     
-    // Playback recorded path, which is "Shake Me"
-    //    NSMutableArray* recordedPaths = [NSMutableArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Recording" ofType:@"data"]];
-    //    if([recordedPaths count])
-    //        [self performSelector:@selector(playback:) withObject:recordedPaths afterDelay:0.2];
-    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self drawBackgroundImage];
     });
@@ -529,12 +524,6 @@ typedef struct {
 // Drawings a line onscreen based on where the user touches
 - (void)renderLineFromPoint:(CGPoint)start toPoint:(CGPoint)end
 {
-	static GLfloat*		vertexBuffer = NULL;
-//	static NSUInteger	vertexMax = 64;
-    NSUInteger			vertexCount = 2;
-//						count,
-//						i;
-	
 	[EAGLContext setCurrentContext:context];
 	glBindFramebuffer(GL_FRAMEBUFFER, viewFramebuffer);
 	
@@ -544,67 +533,13 @@ typedef struct {
 	start.y *= scale;
 	end.x *= scale;
 	end.y *= scale;
-	
-	// Allocate vertex array buffer
-	if(vertexBuffer == NULL)
-		vertexBuffer = malloc(2 * 4 * sizeof(GLfloat));
-//
-//	// Add points to the buffer so there are drawing points every X pixels
-//	count = MAX(ceilf(sqrtf((end.x - start.x) * (end.x - start.x) + (end.y - start.y) * (end.y - start.y)) / kBrushPixelStep), 1);
-//	for(i = 0; i < count; ++i) {
-//		if(vertexCount == vertexMax) {
-//			vertexMax = 2 * vertexMax;
-//			vertexBuffer = realloc(vertexBuffer, vertexMax * 2 * sizeof(GLfloat));
-//		}
-//
-		vertexBuffer[0] = start.x - 25;
-		vertexBuffer[1] = start.y - 25;
-        vertexBuffer[2] = start.x + 25;
-        vertexBuffer[3] = start.y - 25;
-    vertexBuffer[4] = start.x - 25;
-    vertexBuffer[5] = start.y + 25;
-    vertexBuffer[6] = start.x + 25;
-    vertexBuffer[7] = start.y + 25;
-//		vertexCount += 1;
-//	}
-    
-//    float CUBE[] = {
-//        0.0f, 0.0f,
-//            0.0f, 0.5f,
-//        0.5f, 0.0f,
-//
-//            0.5f, 0.5f,
-//
-//
-//    };
-    float para_vertex[] = {
-        0.1, 0.5, 0.0, (GLfloat)1.0,(GLfloat)1.0,(GLfloat)0.0,
-        0.2, 0.3, 0.0, (GLfloat)1.0,(GLfloat)1.0,(GLfloat)0.0,
-        0.3, 0.5, 0.0, (GLfloat)1.0,(GLfloat)0.0,(GLfloat)0.0,
-        0.4, 0.3, 0.0, (GLfloat)1.0,(GLfloat)0.0,(GLfloat)0.0,
-        0.5, 0.5, 0.0, (GLfloat)1.0,(GLfloat)1.0,(GLfloat)0.0,
-        0.6, 0.3, 0.0, (GLfloat)1.0,(GLfloat)1.0,(GLfloat)0.0
-    };
     
     float or_vertex[] = {
         -1.0, 1.0,
         -1.0, -1.0,
         1.0, 1.0,
-        1.0, -1.00,
+        1.0, -1.0,
     };
-    
-//    float vertices[] = {
-//        // 位置              // 颜色
-//        -0.5f, -0.5f, 0.0f,  1.0f, 1.0f,1.0f,   // 左下
-//        0.0f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f ,   // 顶部
-//        0.0f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f, // 右中
-//        0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f ,   // 顶部
-//        0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f,    // 右下
-//        // 位置              // 颜色
-//         0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // 右下
-//        1.0f, 0.5f, 0.0f,  1.0f, 1.0f, 1.0f,   // 左下
-//         0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // 顶部
-//    };
     
     glUniform2f(program[PROGRAM_POINT].uniform[UNIFORM_LASTPOINT], start.x, start.y);
     
@@ -736,6 +671,16 @@ typedef struct {
 - (void)eraserPaint:(BOOL)isEraser {
     glUseProgram(program[PROGRAM_POINT].id);
     glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_ERASER], isEraser);
+}
+
+- (void)updateLineWidth:(CGFloat)lineWidth {
+    glUseProgram(program[PROGRAM_POINT].id);
+    glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEWIDTH], lineWidth);
+}
+
+- (void)updateBlurWidth:(CGFloat)lineWidth {
+    glUseProgram(program[PROGRAM_POINT].id);
+    glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEBLURWIDTH], lineWidth);
 }
 
 @end

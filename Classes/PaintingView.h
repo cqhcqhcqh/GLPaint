@@ -62,4 +62,6 @@
 - (void)erase;
 - (void)setBrushColorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue;
 - (void)eraserPaint:(BOOL)isEraser;
+- (void)updateLineWidth:(CGFloat)lineWidth;
+- (void)updateBlurWidth:(CGFloat)lineWidth;
 @end
