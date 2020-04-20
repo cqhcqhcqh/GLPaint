@@ -6,6 +6,6 @@ varying lowp vec4 textureVertex;
 
 void main()
 {
-    gl_Position = inVertex;
+    gl_Position = MVP * inVertex;
     textureVertex = inTextureVertex;
 }

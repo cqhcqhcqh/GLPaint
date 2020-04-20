@@ -121,7 +121,7 @@ typedef struct {
     // OpenGL name for the depth buffer that is attached to viewFramebuffer, if it exists (0 if it does not exist)
     GLuint depthRenderbuffer;
 	
-	textureInfo_t brushTexture;     // brush texture
+	textureInfo_t backgroundTexture;     // brush texture
     GLfloat brushColor[4];          // brush color
     
 	Boolean	firstTouch;
@@ -392,7 +392,7 @@ typedef struct {
     // Create a Vertex Buffer Object to hold our data
     glGenBuffers(1, &vboId);
     
-    [self textureFromName:@"maskImage"];
+    backgroundTexture = [self textureFromName:@"maskImage"];
     
     // Load shaders
     [self setupShaders];
@@ -415,11 +415,16 @@ typedef struct {
 
 - (void)drawBackgroundImage {
     
-    float or_vertex[] = {
-        -1.0, 1.0, 0.0, 0.0,
-        -1.0, -1.0, 0.0, 1.0,
-        1.0, 1.0, 1.0, 0.0,
-        1.0, -1.0, 1.0, 1.0,
+    CGFloat ratio = backgroundTexture.width / (backgroundTexture.height * 1.0);
+    CGFloat height = 500.0;
+    CGFloat width = height * ratio;
+    CGFloat originX = (backingWidth - width) / 2;
+    CGFloat originY = (backingHeight - height) / 2;
+    GLfloat or_vertex[] = {
+        originX, originY + height, 0.0, 0.0,
+        originX, originY, 0.0, 1.0,
+        originX + width, originY + height, 1.0, 0.0,
+        originX + width, originY, 1.0, 1.0,
     };
     
     glBindBuffer(GL_ARRAY_BUFFER, vboId);
@@ -491,9 +496,9 @@ typedef struct {
 		depthRenderbuffer = 0;
 	}
     // texture
-    if (brushTexture.id) {
-		glDeleteTextures(1, &brushTexture.id);
-		brushTexture.id = 0;
+    if (backgroundTexture.id) {
+		glDeleteTextures(1, &backgroundTexture.id);
+		backgroundTexture.id = 0;
 	}
     // vbo
     if (vboId) {
