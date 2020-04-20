@@ -77,6 +77,8 @@ enum {
     UNIFORM_CURRENTPOINT,
     UNIFORM_LINEWIDTH,
     UNIFORM_LINEBLURWIDTH,
+    UNIFORM_SCREENTSIZE,
+    UNIFORM_ERASER,
 	NUM_UNIFORMS
 };
 
@@ -216,7 +218,7 @@ typedef struct {
                 "inVertex",
             };
             const GLchar *uniformName[NUM_UNIFORMS] = {
-                "MVP", "vertexColor", "u_lastPoint", "u_currentPoint", "u_lineWidth", "u_lineBlurWidth"
+                "MVP", "vertexColor", "u_lastPoint", "u_currentPoint", "u_lineWidth", "u_lineBlurWidth", "u_screenSize", "u_eraser"
             };
             
             // auto-assign known attribs
@@ -287,10 +289,12 @@ typedef struct {
             glUniformMatrix4fv(program[PROGRAM_POINT].uniform[UNIFORM_MVP], 1, GL_FALSE, MVPMatrix.m);
         
             // point size
-            glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEWIDTH], 100.0);
+            glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEWIDTH], 50.0);
             
-            glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEBLURWIDTH], 100.0);
+            glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEBLURWIDTH], 50.0);
                         
+            glUniform2f(program[PROGRAM_POINT].uniform[UNIFORM_SCREENTSIZE], UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
+            
             // initialize brush color
             glUniform4fv(program[PROGRAM_POINT].uniform[UNIFORM_VERTEX_COLOR], 1, brushColor);
         }
@@ -394,8 +398,8 @@ typedef struct {
     [self setupShaders];
     
     // Enable blending and set a blending function appropriate for premultiplied alpha pixel data
-        glEnable(GL_BLEND);
-//    glDisable(GL_BLEND);
+//        glEnable(GL_BLEND);
+    glDisable(GL_BLEND);
     //    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     
     // Playback recorded path, which is "Shake Me"
@@ -656,7 +660,7 @@ typedef struct {
 {   
 	CGRect				bounds = [self bounds];
     UITouch*            touch = [[event touchesForView:self] anyObject];
-	firstTouch = YES;
+//	firstTouch = YES;
 	// Convert touch point from UIView referential to OpenGL one (upside-down flip)
 	location = [touch locationInView:self];
 	location.y = bounds.size.height - location.y;
@@ -669,16 +673,16 @@ typedef struct {
 	UITouch*			touch = [[event touchesForView:self] anyObject];
 		
 	// Convert touch point from UIView referential to OpenGL one (upside-down flip)
-	if (firstTouch) {
-		firstTouch = NO;
-		previousLocation = [touch previousLocationInView:self];
-		previousLocation.y = bounds.size.height - previousLocation.y;
-	} else {
+//	if (firstTouch) {
+//		firstTouch = NO;
+//		previousLocation = [touch previousLocationInView:self];
+//		previousLocation.y = bounds.size.height - previousLocation.y;
+//	} else {
 		location = [touch locationInView:self];
 	    location.y = bounds.size.height - location.y;
 		previousLocation = [touch previousLocationInView:self];
 		previousLocation.y = bounds.size.height - previousLocation.y;
-	}
+//	}
 		
 	// Render the stroke
 	[self renderLineFromPoint:previousLocation toPoint:location];
@@ -689,12 +693,12 @@ typedef struct {
 {
 	CGRect				bounds = [self bounds];
     UITouch*            touch = [[event touchesForView:self] anyObject];
-	if (firstTouch) {
+//	if (firstTouch) {
 		firstTouch = NO;
 		previousLocation = [touch previousLocationInView:self];
 		previousLocation.y = bounds.size.height - previousLocation.y;
 		[self renderLineFromPoint:previousLocation toPoint:location];
-	}
+//	}
 }
 
 // Handles the end of a touch event.
@@ -722,6 +726,11 @@ typedef struct {
 
 - (BOOL)canBecomeFirstResponder {
     return YES;
+}
+
+- (void)eraserPaint:(BOOL)isEraser {
+    glUseProgram(program[PROGRAM_POINT].id);
+    glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_ERASER], isEraser);
 }
 
 @end

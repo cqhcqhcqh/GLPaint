@@ -158,6 +158,11 @@
     
     // Defer to the OpenGL view to set the brush color
     [(PaintingView *)self.view setBrushColorWithRed:components[0] green:components[1] blue:components[2]];
+    if ([sender selectedSegmentIndex] == 0) {
+        [(PaintingView *)self.view eraserPaint:YES];
+    } else {
+        [(PaintingView *)self.view eraserPaint:NO];
+    }
 }
 
 // Called when receiving the "shake" notification; plays the erase sound and redraws the view
