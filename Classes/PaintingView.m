@@ -66,11 +66,13 @@
 // Shaders
 enum {
     PROGRAM_POINT,
+    PROGRAM_BACKGROUND,
     NUM_PROGRAMS
 };
 
 enum {
 	UNIFORM_MVP,
+    UNIFORM_VERTEX_COLOR,
     UNIFORM_LASTPOINT,
     UNIFORM_CURRENTPOINT,
     UNIFORM_LINEWIDTH,
@@ -80,7 +82,7 @@ enum {
 
 enum {
 	ATTRIB_VERTEX,
-    ATTRIB_VERTEXCOLOR,
+    ATTRIB_TEXTURE_VERTEX,
 	NUM_ATTRIBS
 };
 
@@ -92,6 +94,7 @@ typedef struct {
 
 programInfo_t program[NUM_PROGRAMS] = {
     { "point.vsh",   "point.fsh" },     // PROGRAM_POINT
+    { "background.vsh", "background.fsh"},
 };
 
 
@@ -204,28 +207,56 @@ typedef struct {
 		GLsizei attribCt = 0;
 		GLchar *attribUsed[NUM_ATTRIBS];
 		GLint attrib[NUM_ATTRIBS];
-		GLchar *attribName[NUM_ATTRIBS] = {
-			"inVertex",
-            "vertexColor",
-		};
-		const GLchar *uniformName[NUM_UNIFORMS] = {
-			"MVP", "u_lastPoint", "u_currentPoint", "u_lineWidth", "u_lineBlurWidth"
-		};
+        if (i == PROGRAM_POINT) {
+            GLchar *attribName[NUM_ATTRIBS] = {
+                "inVertex",
+            };
+            const GLchar *uniformName[NUM_UNIFORMS] = {
+                "MVP", "vertexColor", "u_lastPoint", "u_currentPoint", "u_lineWidth", "u_lineBlurWidth"
+            };
+            
+            // auto-assign known attribs
+            for (int j = 0; j < NUM_ATTRIBS - 1; j++)
+            {
+                if (strstr(vsrc, attribName[j]))
+                {
+                    attrib[attribCt] = j;
+                    attribUsed[attribCt++] = attribName[j];
+                }
+            }
+            
+            glueCreateProgram(vsrc, fsrc,
+                              attribCt, (const GLchar **)&attribUsed[0], attrib,
+                              NUM_UNIFORMS, &uniformName[0], program[i].uniform,
+                              &program[i].id);
+        } else if (i == PROGRAM_BACKGROUND) {
+            GLchar *attribName[NUM_ATTRIBS] = {
+                "inVertex",
+                "inTextureVertex",
+            };
+            const GLchar *uniformName[1] = {
+                "texture"
+            };
+            
+            // auto-assign known attribs
+            for (int j = 0; j < 1; j++)
+            {
+                if (strstr(vsrc, attribName[j]))
+                {
+                    attrib[attribCt] = j;
+                    attribUsed[attribCt++] = attribName[j];
+                }
+            }
+            
+            glueCreateProgram(vsrc, fsrc,
+                              attribCt, (const GLchar **)&attribUsed[0], attrib,
+                              1, &uniformName[0], program[i].uniform,
+                              &program[i].id);
+            
+            glUseProgram(program[PROGRAM_BACKGROUND].id);
+            glUniform1i(program[PROGRAM_BACKGROUND].uniform[0], 0);
+        }
 		
-		// auto-assign known attribs
-		for (int j = 0; j < NUM_ATTRIBS; j++)
-		{
-			if (strstr(vsrc, attribName[j]))
-			{
-				attrib[attribCt] = j;
-				attribUsed[attribCt++] = attribName[j];
-			}
-		}
-		
-		glueCreateProgram(vsrc, fsrc,
-                          attribCt, (const GLchar **)&attribUsed[0], attrib,
-                          NUM_UNIFORMS, &uniformName[0], program[i].uniform,
-                          &program[i].id);
 		free(vsrc);
 		free(fsrc);
         
@@ -250,7 +281,7 @@ typedef struct {
             glUniform1f(program[PROGRAM_POINT].uniform[UNIFORM_LINEBLURWIDTH], 10.0);
                         
             // initialize brush color
-//            glUniform4fv(program[PROGRAM_POINT].uniform[UNIFORM_VERTEX_COLOR], 1, brushColor);
+            glUniform4fv(program[PROGRAM_POINT].uniform[UNIFORM_VERTEX_COLOR], 1, brushColor);
         }
 	}
     
@@ -288,6 +319,8 @@ typedef struct {
         glGenTextures(1, &texId);
         // Bind the texture name.
         glBindTexture(GL_TEXTURE_2D, texId);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         // Set the texture parameters to use a minifying filter and a linear filer (weighted average)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         // Specify a 2D texture image, providing the a pointer to the image data in memory
@@ -344,12 +377,14 @@ typedef struct {
     // Create a Vertex Buffer Object to hold our data
     glGenBuffers(1, &vboId);
     
+    [self textureFromName:@"maskImage"];
+    
     // Load shaders
     [self setupShaders];
     
     // Enable blending and set a blending function appropriate for premultiplied alpha pixel data
-    //    glEnable(GL_BLEND);
-    glDisable(GL_BLEND);
+        glEnable(GL_BLEND);
+//    glDisable(GL_BLEND);
     //    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     
     // Playback recorded path, which is "Shake Me"
@@ -357,7 +392,37 @@ typedef struct {
     //    if([recordedPaths count])
     //        [self performSelector:@selector(playback:) withObject:recordedPaths afterDelay:0.2];
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self drawBackgroundImage];
+    });
     return YES;
+}
+
+- (void)drawBackgroundImage {
+    
+    float or_vertex[] = {
+        -1.0, 1.0, 0.0, 0.0,
+        -1.0, -1.0, 0.0, 1.0,
+        1.0, 1.0, 1.0, 0.0,
+        1.0, -1.0, 1.0, 1.0,
+    };
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vboId);
+    glBufferData(GL_ARRAY_BUFFER, 16*sizeof(GLfloat), or_vertex, GL_DYNAMIC_DRAW);
+    
+    glEnableVertexAttribArray(ATTRIB_VERTEX);
+    glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, GL_FALSE, 4*sizeof(GLfloat), 0);
+    
+    glEnableVertexAttribArray(ATTRIB_TEXTURE_VERTEX);
+    glVertexAttribPointer(ATTRIB_TEXTURE_VERTEX, 2, GL_FLOAT, GL_FALSE, 4*sizeof(GLfloat), 2*sizeof(GLfloat));
+    
+    // Draw
+    glUseProgram(program[PROGRAM_BACKGROUND].id);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    
+    // Display the buffer
+    glBindRenderbuffer(GL_RENDERBUFFER, viewRenderbuffer);
+    [context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer
@@ -492,20 +557,20 @@ typedef struct {
 //
 //
 //    };
-    float para_vertex[]=
-    {
-        50.0 * 2,(self.bounds.size.height - 100.0) * 2 ,0.0,
-        1.0,1.0,0.0,
-        100.0 * 2,(self.bounds.size.height -30.0) * 2,0.0,
-        1.0,1.0,0.0,
-        60.0 * 2,(self.bounds.size.height -100.0) * 2,0.0,
-        1.0,0.0,0.0,
-        110.0 * 2 ,(self.bounds.size.height -30.0) * 2,0.0,
-        1.0,0.0,0.0,
-        70.0 * 2 ,(self.bounds.size.height -100.0) * 2,0.0,
-        1.0,1.0,0.0,
-        120.0 * 2 ,(self.bounds.size.height -30.0) * 2,0.0,
-        1.0,1.0,0.0
+    float para_vertex[] = {
+        0.1, 0.5, 0.0, (GLfloat)1.0,(GLfloat)1.0,(GLfloat)0.0,
+        0.2, 0.3, 0.0, (GLfloat)1.0,(GLfloat)1.0,(GLfloat)0.0,
+        0.3, 0.5, 0.0, (GLfloat)1.0,(GLfloat)0.0,(GLfloat)0.0,
+        0.4, 0.3, 0.0, (GLfloat)1.0,(GLfloat)0.0,(GLfloat)0.0,
+        0.5, 0.5, 0.0, (GLfloat)1.0,(GLfloat)1.0,(GLfloat)0.0,
+        0.6, 0.3, 0.0, (GLfloat)1.0,(GLfloat)1.0,(GLfloat)0.0
+    };
+    
+    float or_vertex[] = {
+        -1.0, 1.0,
+        -1.0, -1.0,
+        1.0, 1.0,
+        1.0, -1.00,
     };
     
 //    float vertices[] = {
@@ -527,17 +592,14 @@ typedef struct {
     
 	// Load data to the Vertex Buffer Object
 	glBindBuffer(GL_ARRAY_BUFFER, vboId);
-	glBufferData(GL_ARRAY_BUFFER, 36*sizeof(GLfloat), para_vertex, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 8*sizeof(GLfloat), or_vertex, GL_DYNAMIC_DRAW);
 	
     glEnableVertexAttribArray(ATTRIB_VERTEX);
-    glVertexAttribPointer(ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), 0);
-	
-    glEnableVertexAttribArray(ATTRIB_VERTEXCOLOR);
-    glVertexAttribPointer(ATTRIB_VERTEXCOLOR, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), 3*sizeof(GLfloat));
-    
+    glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
+	    
 	// Draw
     glUseProgram(program[PROGRAM_POINT].id);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
 	// Display the buffer
 	glBindRenderbuffer(GL_RENDERBUFFER, viewRenderbuffer);
@@ -641,7 +703,7 @@ typedef struct {
     
     if (initialized) {
         glUseProgram(program[PROGRAM_POINT].id);
-//        glUniform4fv(program[PROGRAM_POINT].uniform[UNIFORM_VERTEX_COLOR], 1, brushColor);
+        glUniform4fv(program[PROGRAM_POINT].uniform[UNIFORM_VERTEX_COLOR], 1, brushColor);
     }
 }
 

@@ -27,6 +27,11 @@
 		2D500B940D5A79C200DBA0E3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D500B920D5A79C200DBA0E3 /* OpenGLES.framework */; };
 		2D500B9A0D5A79CF00DBA0E3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D500B990D5A79CF00DBA0E3 /* QuartzCore.framework */; };
 		2D500C820D5A7DAE00DBA0E3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D500C810D5A7DAE00DBA0E3 /* AudioToolbox.framework */; };
+		63A8FAAA244D75FB00262D27 /* maskImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 63A8FAA9244D75FB00262D27 /* maskImage.png */; };
+		63A8FAAC244D78C800262D27 /* background.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 63A8FAAB244D78C800262D27 /* background.fsh */; };
+		63A8FAAE244D78DD00262D27 /* background.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 63A8FAAD244D78DD00262D27 /* background.vsh */; };
+		63A8FAB0244D8D1700262D27 /* 10149004-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 63A8FAAF244D8D1700262D27 /* 10149004-1.png */; };
+		63A8FAB2244D8DC100262D27 /* icon_Save_Selection@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63A8FAB1244D8DC000262D27 /* icon_Save_Selection@3x.png */; };
 		AF7492AB1728A9E50013253B /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF7492A91728A9E50013253B /* MainWindow.xib */; };
 		AF7E20421728A2C600728423 /* PaintingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF7E203F1728A2C600728423 /* PaintingViewController.xib */; };
 		AF7E20451728A54000728423 /* PaintingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7E20441728A53F00728423 /* PaintingViewController.m */; };
@@ -72,6 +77,11 @@
 		2D500B990D5A79CF00DBA0E3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		2D500C810D5A7DAE00DBA0E3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
+		63A8FAA9244D75FB00262D27 /* maskImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = maskImage.png; sourceTree = "<group>"; };
+		63A8FAAB244D78C800262D27 /* background.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = background.fsh; sourceTree = "<group>"; };
+		63A8FAAD244D78DD00262D27 /* background.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = background.vsh; sourceTree = "<group>"; };
+		63A8FAAF244D8D1700262D27 /* 10149004-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "10149004-1.png"; sourceTree = "<group>"; };
+		63A8FAB1244D8DC000262D27 /* icon_Save_Selection@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_Save_Selection@3x.png"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* GLPaint-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GLPaint-Info.plist"; sourceTree = "<group>"; };
 		AF7492AA1728A9E50013253B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		AF7E20401728A2C600728423 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PaintingViewController.xib; sourceTree = "<group>"; };
@@ -152,6 +162,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				63A8FAB1244D8DC000262D27 /* icon_Save_Selection@3x.png */,
+				63A8FAAF244D8D1700262D27 /* 10149004-1.png */,
+				63A8FAA9244D75FB00262D27 /* maskImage.png */,
 				AF7492A91728A9E50013253B /* MainWindow.xib */,
 				AF7E203F1728A2C600728423 /* PaintingViewController.xib */,
 				AFCEBA1D11D96215001AA22A /* Icon-Small@2x.png */,
@@ -211,6 +224,8 @@
 			children = (
 				AF877F9017272B68002D08B8 /* point.vsh */,
 				AF877F8F17272B68002D08B8 /* point.fsh */,
+				63A8FAAD244D78DD00262D27 /* background.vsh */,
+				63A8FAAB244D78C800262D27 /* background.fsh */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -241,7 +256,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = E6YTL27QWA;
@@ -271,15 +286,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				28F25BC20D64BF0B00158CCD /* Recording.data in Resources */,
+				63A8FAAA244D75FB00262D27 /* maskImage.png in Resources */,
 				28F25BC30D64BF0B00158CCD /* Select.caf in Resources */,
 				28F25BC40D64BF0B00158CCD /* Erase.caf in Resources */,
 				1BBE306C0DD273B90012773B /* Blue.png in Resources */,
 				1BBE306D0DD273B90012773B /* Green.png in Resources */,
+				63A8FAAE244D78DD00262D27 /* background.vsh in Resources */,
 				1BBE306E0DD273B90012773B /* Purple.png in Resources */,
 				1BBE306F0DD273B90012773B /* Red.png in Resources */,
 				1BBE30700DD273B90012773B /* Yellow.png in Resources */,
 				1BD0B6AB0DDCA9B800E538F8 /* Default.png in Resources */,
 				1B612B1F0DDCF277003A5CC7 /* Particle.png in Resources */,
+				63A8FAB2244D8DC100262D27 /* icon_Save_Selection@3x.png in Resources */,
+				63A8FAB0244D8D1700262D27 /* 10149004-1.png in Resources */,
 				AFCEBA2111D96215001AA22A /* Icon-72.png in Resources */,
 				AFCEBA2211D96215001AA22A /* Icon-Small-50.png in Resources */,
 				AFCEBA2311D96215001AA22A /* Icon-Small.png in Resources */,
@@ -290,6 +309,7 @@
 				AF877F8617271F57002D08B8 /* Default-568h@2x.png in Resources */,
 				AF877F9117272B68002D08B8 /* point.fsh in Resources */,
 				AF877F9217272B68002D08B8 /* point.vsh in Resources */,
+				63A8FAAC244D78C800262D27 /* background.fsh in Resources */,
 				AF7E20421728A2C600728423 /* PaintingViewController.xib in Resources */,
 				AF7492AB1728A9E50013253B /* MainWindow.xib in Resources */,
 			);
@@ -347,8 +367,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				INFOPLIST_FILE = "GLPaint-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = GLPaint;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WARNING_CFLAGS = "-Wall";
@@ -366,8 +387,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				INFOPLIST_FILE = "GLPaint-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = GLPaint;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WARNING_CFLAGS = "-Wall";
@@ -378,13 +400,37 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -394,11 +440,34 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 			};
 			name = Release;
