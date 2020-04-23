@@ -27,6 +27,8 @@
 		2D500B940D5A79C200DBA0E3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D500B920D5A79C200DBA0E3 /* OpenGLES.framework */; };
 		2D500B9A0D5A79CF00DBA0E3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D500B990D5A79CF00DBA0E3 /* QuartzCore.framework */; };
 		2D500C820D5A7DAE00DBA0E3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D500C810D5A7DAE00DBA0E3 /* AudioToolbox.framework */; };
+		63943C6B24506354008A6345 /* display.png in Resources */ = {isa = PBXBuildFile; fileRef = 63943C6A24506353008A6345 /* display.png */; };
+		63943C6E24506454008A6345 /* UIView+VSBlend.m in Sources */ = {isa = PBXBuildFile; fileRef = 63943C6C24506454008A6345 /* UIView+VSBlend.m */; };
 		63A8FAAA244D75FB00262D27 /* maskImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 63A8FAA9244D75FB00262D27 /* maskImage.png */; };
 		63A8FAAC244D78C800262D27 /* background.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 63A8FAAB244D78C800262D27 /* background.fsh */; };
 		63A8FAAE244D78DD00262D27 /* background.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 63A8FAAD244D78DD00262D27 /* background.vsh */; };
@@ -49,6 +51,7 @@
 		AFCEBA2511D96215001AA22A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AFCEBA1E11D96215001AA22A /* Icon.png */; };
 		AFCEBA2611D96215001AA22A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AFCEBA1F11D96215001AA22A /* Icon@2x.png */; };
 		AFCEBA2711D96215001AA22A /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = AFCEBA2011D96215001AA22A /* iTunesArtwork */; };
+		B1A862BEAB1A1828868FC3C7 /* Pods_GLPaint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFCAFCA078C1656DD3BD559 /* Pods_GLPaint.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +81,10 @@
 		2D500B990D5A79CF00DBA0E3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		2D500C810D5A7DAE00DBA0E3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
+		5D186E1D8DBD586AF4F17F8F /* Pods-GLPaint.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GLPaint.release.xcconfig"; path = "Target Support Files/Pods-GLPaint/Pods-GLPaint.release.xcconfig"; sourceTree = "<group>"; };
+		63943C6A24506353008A6345 /* display.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = display.png; sourceTree = "<group>"; };
+		63943C6C24506454008A6345 /* UIView+VSBlend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+VSBlend.m"; sourceTree = "<group>"; };
+		63943C6D24506454008A6345 /* UIView+VSBlend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+VSBlend.h"; sourceTree = "<group>"; };
 		63A8FAA9244D75FB00262D27 /* maskImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = maskImage.png; sourceTree = "<group>"; };
 		63A8FAAB244D78C800262D27 /* background.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = background.fsh; sourceTree = "<group>"; };
 		63A8FAAD244D78DD00262D27 /* background.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = background.vsh; sourceTree = "<group>"; };
@@ -85,7 +92,9 @@
 		63A8FAB1244D8DC000262D27 /* icon_Save_Selection@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_Save_Selection@3x.png"; sourceTree = "<group>"; };
 		63A8FAB3244D997D00262D27 /* UIColor+Versa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Versa.m"; sourceTree = "<group>"; };
 		63A8FAB4244D997E00262D27 /* UIColor+Versa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Versa.h"; sourceTree = "<group>"; };
+		7CFCAFCA078C1656DD3BD559 /* Pods_GLPaint.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GLPaint.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D1107310486CEB800E47090 /* GLPaint-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GLPaint-Info.plist"; sourceTree = "<group>"; };
+		8F2340DA9A1AD452470F7988 /* Pods-GLPaint.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GLPaint.debug.xcconfig"; path = "Target Support Files/Pods-GLPaint/Pods-GLPaint.debug.xcconfig"; sourceTree = "<group>"; };
 		AF7492AA1728A9E50013253B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		AF7E20401728A2C600728423 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PaintingViewController.xib; sourceTree = "<group>"; };
 		AF7E20431728A53F00728423 /* PaintingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PaintingViewController.h; path = Classes/PaintingViewController.h; sourceTree = "<group>"; };
@@ -120,6 +129,7 @@
 				2D500B940D5A79C200DBA0E3 /* OpenGLES.framework in Frameworks */,
 				2D500B9A0D5A79CF00DBA0E3 /* QuartzCore.framework in Frameworks */,
 				2D500C820D5A7DAE00DBA0E3 /* AudioToolbox.framework in Frameworks */,
+				B1A862BEAB1A1828868FC3C7 /* Pods_GLPaint.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,6 +154,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				A898EEFC27B0075B74572370 /* Pods */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -168,6 +179,7 @@
 				63A8FAB1244D8DC000262D27 /* icon_Save_Selection@3x.png */,
 				63A8FAAF244D8D1700262D27 /* 10149004-1.png */,
 				63A8FAA9244D75FB00262D27 /* maskImage.png */,
+				63943C6A24506353008A6345 /* display.png */,
 				AF7492A91728A9E50013253B /* MainWindow.xib */,
 				AF7E203F1728A2C600728423 /* PaintingViewController.xib */,
 				AFCEBA1D11D96215001AA22A /* Icon-Small@2x.png */,
@@ -203,6 +215,7 @@
 				2D500B920D5A79C200DBA0E3 /* OpenGLES.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				7CFCAFCA078C1656DD3BD559 /* Pods_GLPaint.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -216,12 +229,23 @@
 				63A8FAB3244D997D00262D27 /* UIColor+Versa.m */,
 				AF7E20431728A53F00728423 /* PaintingViewController.h */,
 				AF7E20441728A53F00728423 /* PaintingViewController.m */,
+				63943C6D24506454008A6345 /* UIView+VSBlend.h */,
+				63943C6C24506454008A6345 /* UIView+VSBlend.m */,
 				1B8CA30C0DC8E3A4002C657A /* PaintingView.h */,
 				1B8CA30D0DC8E3A4002C657A /* PaintingView.m */,
 				1B8CA30E0DC8E3A4002C657A /* SoundEffect.h */,
 				1B8CA30F0DC8E3A4002C657A /* SoundEffect.m */,
 			);
 			name = Classes;
+			sourceTree = "<group>";
+		};
+		A898EEFC27B0075B74572370 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8F2340DA9A1AD452470F7988 /* Pods-GLPaint.debug.xcconfig */,
+				5D186E1D8DBD586AF4F17F8F /* Pods-GLPaint.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		AF877F8E17272B68002D08B8 /* Shaders */ = {
@@ -242,6 +266,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "GLPaint" */;
 			buildPhases = (
+				32D6B10A8DF5F5F60BAA3976 /* [CP] Check Pods Manifest.lock */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
@@ -277,6 +302,7 @@
 				en,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -298,6 +324,7 @@
 				1BBE306D0DD273B90012773B /* Green.png in Resources */,
 				63A8FAAE244D78DD00262D27 /* background.vsh in Resources */,
 				1BBE306E0DD273B90012773B /* Purple.png in Resources */,
+				63943C6B24506354008A6345 /* display.png in Resources */,
 				1BBE306F0DD273B90012773B /* Red.png in Resources */,
 				1BBE30700DD273B90012773B /* Yellow.png in Resources */,
 				1BD0B6AB0DDCA9B800E538F8 /* Default.png in Resources */,
@@ -322,6 +349,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		32D6B10A8DF5F5F60BAA3976 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GLPaint-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1D60588E0D05DD3D006BFB54 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -335,6 +387,7 @@
 				AF877F8C17272804002D08B8 /* fileUtil.m in Sources */,
 				AF877F8D17272804002D08B8 /* shaderUtil.c in Sources */,
 				AF7E20451728A54000728423 /* PaintingViewController.m in Sources */,
+				63943C6E24506454008A6345 /* UIView+VSBlend.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,6 +415,7 @@
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8F2340DA9A1AD452470F7988 /* Pods-GLPaint.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -384,6 +438,7 @@
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D186E1D8DBD586AF4F17F8F /* Pods-GLPaint.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;

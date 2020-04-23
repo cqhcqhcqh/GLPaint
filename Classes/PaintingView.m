@@ -122,6 +122,7 @@ typedef struct {
     GLuint depthRenderbuffer;
 	
 	textureInfo_t backgroundTexture;     // brush texture
+    textureInfo_t maskTexture;     // brush texture
     GLfloat brushColor[4];          // brush color
     
 	Boolean	firstTouch;
@@ -152,35 +153,47 @@ typedef struct {
 	return [CAEAGLLayer class];
 }
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        [self setup];
+    }
+    return self;
+}
+
 // The GL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder*)coder {
-	
+    
     if ((self = [super initWithCoder:coder])) {
-		CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
-		
-		eaglLayer.opaque = YES;
-		// In this application, we want to retain the EAGLDrawable contents after a call to presentRenderbuffer.
-		eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-										[NSNumber numberWithBool:YES], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
-		
-		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-		
-		if (!context || ![EAGLContext setCurrentContext:context]) {
-			return nil;
-		}
-        
-        // Set the view's scale factor as you wish
-        self.contentScaleFactor = [[UIScreen mainScreen] scale];
-        self.backgroundColor = [UIColor clearColor];
-        
-        brushColor[0] = 1.0;
-        brushColor[1] = 0.2;
-        brushColor[2] = 0.4;
-		// Make sure to start with a cleared buffer
-		needsErase = YES;
-	}
-	
-	return self;
+        [self setup];
+    }
+    
+    return self;
+}
+
+- (void)setup {
+    // 在init的方法中，从基类获取layer属性，并将其转型至CAEAGLLayer
+    CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
+    eaglLayer.opaque = YES;
+    // In this application, we want to retain the EAGLDrawable contents after a call to presentRenderbuffer.
+    eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [NSNumber numberWithBool:YES], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+    
+    context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    
+    if (!context || ![EAGLContext setCurrentContext:context]) {
+        return;
+    }
+    
+    // Set the view's scale factor as you wish
+    self.contentScaleFactor = [[UIScreen mainScreen] scale];
+    self.backgroundColor = [UIColor clearColor];
+    
+    brushColor[0] = 1.0;
+    brushColor[1] = 0.2;
+    brushColor[2] = 0.4;
+    // Make sure to start with a cleared buffer
+    needsErase = YES;
 }
 
 // If our view is resized, we'll be asked to layout subviews.
@@ -240,9 +253,10 @@ typedef struct {
                 "inVertex",
                 "inTextureVertex",
             };
-            const GLchar *uniformName[2] = {
-                "MVP",
-                "texture",
+            const GLchar *uniformName[3] = {
+//                "MVP",
+                "texture0",
+                "texture1",
             };
             
             // auto-assign known attribs
@@ -261,13 +275,16 @@ typedef struct {
                               &program[i].id);
             
             glUseProgram(program[PROGRAM_BACKGROUND].id);
-            glUniform1i(program[PROGRAM_BACKGROUND].uniform[1], 0);
+            // glUniform1i设置每个采样器的方式告诉OpenGL每个着色器采样器属于哪个纹理单元
+            // location textureid
+            glUniform1i(0, 0);
+            glUniform1i(1, 1);
             
-            GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(0, backingWidth, 0, backingHeight, -1, 1);
-            GLKMatrix4 modelViewMatrix = GLKMatrix4Identity; // this sample uses a constant identity modelView matrix
-            GLKMatrix4 MVPMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
+//            GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(0, backingWidth, 0, backingHeight, -1, 1);
+//            GLKMatrix4 modelViewMatrix = GLKMatrix4Identity; // this sample uses a constant identity modelView matrix
+//            GLKMatrix4 MVPMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
             
-            glUniformMatrix4fv(program[PROGRAM_BACKGROUND].uniform[UNIFORM_MVP], 1, GL_FALSE, MVPMatrix.m);
+//            glUniformMatrix4fv(program[PROGRAM_BACKGROUND].uniform[UNIFORM_MVP], 1, GL_FALSE, MVPMatrix.m);
         }
 		
 		free(vsrc);
@@ -392,7 +409,10 @@ typedef struct {
     // Create a Vertex Buffer Object to hold our data
     glGenBuffers(1, &vboId);
     
-    backgroundTexture = [self textureFromName:@"maskImage"];
+    glActiveTexture(GL_TEXTURE0);
+    backgroundTexture = [self textureFromName:@"display"];
+    glActiveTexture(GL_TEXTURE1);
+    maskTexture = [self textureFromName:@"maskImage"];
     
     // Load shaders
     [self setupShaders];
@@ -409,17 +429,13 @@ typedef struct {
 }
 
 - (void)drawBackgroundImage {
+    [EAGLContext setCurrentContext:context];
     
-    CGFloat ratio = backgroundTexture.width / (backgroundTexture.height * 1.0);
-    CGFloat height = 500.0;
-    CGFloat width = height * ratio;
-    CGFloat originX = (backingWidth - width) / 2;
-    CGFloat originY = (backingHeight - height) / 2;
     GLfloat or_vertex[] = {
-        originX, originY + height, 0.0, 0.0,
-        originX, originY, 0.0, 1.0,
-        originX + width, originY + height, 1.0, 0.0,
-        originX + width, originY, 1.0, 1.0,
+        -1.0, 1.0, 0.0, 0.0,
+        -1.0, -1.0, 0.0, 1.0,
+        1.0, 1.0, 1.0, 0.0,
+        1.0, -1.0, 1.0, 1.0,
     };
     
     glBindBuffer(GL_ARRAY_BUFFER, vboId);

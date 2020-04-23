@@ -48,6 +48,7 @@
 #import "PaintingViewController.h"
 #import "PaintingView.h"
 #import "SoundEffect.h"
+#import "UIView+VSBlend.h"
 
 //CONSTANTS:
 
@@ -70,6 +71,8 @@
 	SoundEffect			*erasingSound;
 	SoundEffect			*selectSound;
 	CFTimeInterval		lastTime;
+    PaintingView * paintingView;
+    UIImageView *backgroundView;
 }
 @end
 
@@ -78,6 +81,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    paintingView = [[PaintingView alloc] initWithFrame:CGRectMake(0, 0, 358, 537)];
+    
+//    backgroundView = [[UIImageView alloc] initWithFrame:paintingView.frame];
+//    backgroundView.image = [UIImage imageNamed:@"display"];
+//    [self.view addSubview:backgroundView];
+    [self.view addSubview:paintingView];
     
     self.view.backgroundColor = [UIColor whiteColor];
     // Create a segmented control so that the user can choose the brush color.
@@ -114,7 +123,7 @@
     const CGFloat *components = CGColorGetComponents(color);
     
 	// Defer to the OpenGL view to set the brush color
-	[(PaintingView *)self.view setBrushColorWithRed:components[0] green:components[1] blue:components[2]];
+	[paintingView setBrushColorWithRed:components[0] green:components[1] blue:components[2]];
 	
 	// Load the sounds
 	NSBundle *mainBundle = [NSBundle mainBundle];
@@ -166,15 +175,15 @@
 }
 
 - (void)blurWidthChange:(UISlider *)slider {
-    [(PaintingView *)self.view updateBlurWidth:slider.value];
+    [paintingView updateBlurWidth:slider.value];
 }
 
 - (void)lineWidthChange:(UISlider *)slider {
-    [(PaintingView *)self.view updateLineWidth:slider.value];
+    [paintingView updateLineWidth:slider.value];
 }
 
 - (void)eraser:(UISwitch *)sender {
-    [(PaintingView *)self.view eraserPaint:sender.isOn];
+    [paintingView eraserPaint:sender.isOn];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -208,11 +217,11 @@
     const CGFloat *components = CGColorGetComponents(color);
     
     // Defer to the OpenGL view to set the brush color
-    [(PaintingView *)self.view setBrushColorWithRed:components[0] green:components[1] blue:components[2]];
+    [paintingView setBrushColorWithRed:components[0] green:components[1] blue:components[2]];
     if ([sender selectedSegmentIndex] == 0) {
-        [(PaintingView *)self.view eraserPaint:YES];
+        [paintingView eraserPaint:YES];
     } else {
-        [(PaintingView *)self.view eraserPaint:NO];
+        [paintingView eraserPaint:NO];
     }
 }
 
@@ -221,7 +230,7 @@
 {
 	if(CFAbsoluteTimeGetCurrent() > lastTime + kMinEraseInterval) {
 		[erasingSound play];
-		[(PaintingView *)self.view erase];
+		[paintingView erase];
 		lastTime = CFAbsoluteTimeGetCurrent();
 	}
 }

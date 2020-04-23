@@ -1,11 +1,11 @@
 
 attribute vec4 inVertex;
 attribute vec4 inTextureVertex;
-uniform mat4 MVP;
+//uniform mat4 MVP;
 varying lowp vec4 textureVertex;
 
 void main()
 {
-    gl_Position = MVP * inVertex;
+    gl_Position = inVertex;
     textureVertex = inTextureVertex;
 }
